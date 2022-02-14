@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    /* return MaterialApp(
+    return MaterialApp(
       home: Scaffold(
         backgroundColor: Colors.indigo,
         body: SafeArea(
@@ -60,52 +60,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-    );*/
-    return Scaffold(
-      appBar: AppBar(),
-      body: Column(
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              RaisedButton(
-                onPressed: _choose,
-                child: Text('Choose Image'),
-              ),
-              SizedBox(width: 10.0),
-              RaisedButton(
-                onPressed: _upload,
-                child: Text('Upload Image'),
-              )
-            ],
-          ),
-          file == null ? Text('No Image Selected') : Image.file(file)
-        ],
-      ),
     );
-  }
-
-  final String phpEndPoint = 'http://192.168.43.171/phpAPI/image.php';
-  final String nodeEndPoint = 'http://192.168.43.171:3000/image';
-  File file;
-
-  void _choose() async {
-    file = await ImagePicker.pickImage(source: ImageSource.camera);
-// file = await ImagePicker.pickImage(source: ImageSource.gallery);
-  }
-
-  void _upload() {
-    if (file == null) return;
-    String base64Image = base64Encode(file.readAsBytesSync());
-    String fileName = file.path.split("/").last;
-
-    http.post(phpEndPoint, body: {
-      "image": base64Image,
-      "name": fileName,
-    }).then((res) {
-      print(res.statusCode);
-    }).catchError((err) {
-      print(err);
-    });
   }
 }
