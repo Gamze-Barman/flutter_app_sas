@@ -44,7 +44,7 @@ Future<List<allCurrencyModel>> fetchAllCurrency(
         .map((data) => new allCurrencyModel.fromJson(data))
         .toList();
   } else {
-    throw Exception('Unexpected error occuredhhhyyy!');
+    throw Exception('Unexpected error occuredhy!');
   }
 }
 

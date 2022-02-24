@@ -1,14 +1,11 @@
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-
 import 'dart:async';
 import 'dart:convert';
-
 import 'filedetails.dart';
 import 'globals.dart' as globals;
 
@@ -65,7 +62,7 @@ Future<List<allOrderLineItemsModel>> fetchAllOrders(
         .map((data) => new allOrderLineItemsModel.fromJson(data))
         .toList();
   } else {
-    throw Exception('Unexpected error occuredhhhyyy!');
+    throw Exception('Unexpected error occuredhy!');
   }
 }
 

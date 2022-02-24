@@ -12,4 +12,5 @@ String selectedPortId = "";
 String selectedNotesId = "";
 String selectedWarehouseId = "";
 String selectedOrderId = "";
+String selectedSalesId = "";
 double globalDouble = 10.0;

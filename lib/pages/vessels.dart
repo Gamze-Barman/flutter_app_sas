@@ -64,7 +64,7 @@ Future<List<allVesselsModel>> fetchAllVessels(String url, String token) async {
         .map((data) => new allVesselsModel.fromJson(data))
         .toList();
   } else {
-    throw Exception('Unexpected error occuredhhhyyy!');
+    throw Exception('Unexpected error occuredhy!');
   }
 }
 
@@ -82,7 +82,7 @@ Future<vesselDetailModel> fetchVesselDetails(String url, String token) async {
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
-    throw Exception('Failed to load album');
+    throw Exception('Unexpected error occuredhy');
   }
 }
 
@@ -319,6 +319,13 @@ class _VesselsPageState extends State<VesselsPage> {
                 child: Row(
                   children: [
                     Text(
+                      'Name:',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.grey,
+                      ),
+                    ),
+                    Text(
                       name,
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -344,7 +351,7 @@ class _VesselsPageState extends State<VesselsPage> {
                       children: [
                         Container(
                           child: Text(
-                            'Imo',
+                            'Imo:',
                             style: TextStyle(
                               color: Colors.grey,
                             ),
@@ -352,7 +359,7 @@ class _VesselsPageState extends State<VesselsPage> {
                         ),
                         Container(
                           child: Text(
-                            'Flag',
+                            'Flag:',
                             style: TextStyle(
                               color: Colors.grey,
                             ),
@@ -413,6 +420,7 @@ class _VesselsPageState extends State<VesselsPage> {
                         child: OutlinedButton(
                           child: Text(
                             'BACK',
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.white,
                             ),
@@ -451,6 +459,7 @@ class _VesselsPageState extends State<VesselsPage> {
                         child: OutlinedButton(
                           child: Text(
                             'SHOW FILES',
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.white,
                             ),

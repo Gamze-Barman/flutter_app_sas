@@ -50,7 +50,7 @@ Future<List<allDepartmentModel>> fetchAllDepartments(
         .map((data) => new allDepartmentModel.fromJson(data))
         .toList();
   } else {
-    throw Exception('Unexpected error occuredhhhyyy!');
+    throw Exception('Unexpected error occuredhy!');
   }
 }
 

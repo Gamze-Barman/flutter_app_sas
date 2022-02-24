@@ -52,7 +52,7 @@ Future<List<allWarehousesModel>> fetchAllWarehouses(
         .map((data) => new allWarehousesModel.fromJson(data))
         .toList();
   } else {
-    throw Exception('Unexpected error occuredhhhyyy!');
+    throw Exception('Unexpected error occuredhy!');
   }
 }
 

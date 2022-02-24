@@ -1,13 +1,6 @@
-import 'dart:html';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_sas/pages/vessels.dart';
-import 'package:flutter_app_sas/pages/warehouses.dart';
 import 'package:flutter_app_sas/root.dart';
-import 'customers.dart';
-import 'vessels.dart';
-import 'warehouses.dart';
 import 'dart:async';
 import 'globals.dart' as globals;
 import 'package:path/path.dart';
@@ -15,7 +8,6 @@ import 'package:async/async.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key, required this.title}) : super(key: key);

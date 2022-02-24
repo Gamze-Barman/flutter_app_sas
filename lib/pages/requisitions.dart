@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_sas/pages/attachments.dart';
+import 'package:flutter_app_sas/pages/requisitionitempage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -8,7 +9,7 @@ import 'globals.dart' as globals;
 String token = globals.token;
 
 String url_getAllRequisitions =
-    globals.baseUrl + 'Requisition/GetFilesRequisitions?fileId=';
+    globals.baseUrl + 'RequisitionNote/GetFilesNotes?fileId=';
 
 class allRequisitionsModel {
   final String id;
@@ -60,7 +61,7 @@ Future<List<allRequisitionsModel>> fetchAllFiles(
         .map((data) => new allRequisitionsModel.fromJson(data))
         .toList();
   } else {
-    throw Exception('Unexpected error occuredhhhyyy!');
+    throw Exception('Unexpected error occuredhy!');
   }
 }
 
@@ -142,6 +143,7 @@ class _RequisitionsPageState extends State<RequisitionsPage> {
                                       style: TextStyle(
                                         color: Colors.blue,
                                         fontWeight: FontWeight.bold,
+                                        fontSize: 10,
                                       ),
                                     ),
                                   ],
@@ -454,7 +456,13 @@ class _RequisitionsPageState extends State<RequisitionsPage> {
                     Flexible(
                       child: Container(
                         child: OutlinedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => RequisitionItemPage()),
+                            );
+                          },
                           child: Text(
                             'SHOW ITEMS',
                             textAlign: TextAlign.center,

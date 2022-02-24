@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_sas/pages/vessels.dart';
@@ -11,7 +10,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'globals.dart' as globals;
 import 'package:rounded_loading_button/rounded_loading_button.dart';
-
 import 'homepage.dart';
 
 class loginModel {

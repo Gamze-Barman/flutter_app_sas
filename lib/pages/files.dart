@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
-
 import 'filedetails.dart';
 import 'globals.dart' as globals;
 
@@ -66,7 +65,7 @@ Future<List<allFilesModel>> fetchAllFiles(String url, String token) async {
         .map((data) => new allFilesModel.fromJson(data))
         .toList();
   } else {
-    throw Exception('Unexpected error occuredhhhyyy!');
+    throw Exception('Unexpected error occuredhy!');
   }
 }
 
@@ -248,7 +247,7 @@ class _FilesPageState extends State<FilesPage> {
                                         child: Row(
                                           children: [
                                             Text(
-                                              'Department',
+                                              'Department:',
                                               style: TextStyle(
                                                 color: Colors.grey,
                                               ),
@@ -282,7 +281,7 @@ class _FilesPageState extends State<FilesPage> {
                                         child: Row(
                                           children: [
                                             Text(
-                                              'Customer',
+                                              'Customer:',
                                               style: TextStyle(
                                                 color: Colors.grey,
                                               ),
@@ -316,7 +315,7 @@ class _FilesPageState extends State<FilesPage> {
                                         child: Row(
                                           children: [
                                             Text(
-                                              'Port',
+                                              'Port:',
                                               style: TextStyle(
                                                 color: Colors.grey,
                                               ),
@@ -350,7 +349,7 @@ class _FilesPageState extends State<FilesPage> {
                                         child: Row(
                                           children: [
                                             Text(
-                                              'Pay Type',
+                                              'Pay Type:',
                                               style: TextStyle(
                                                 color: Colors.grey,
                                               ),
@@ -384,7 +383,7 @@ class _FilesPageState extends State<FilesPage> {
                                         child: Row(
                                           children: [
                                             Text(
-                                              'Pay Term',
+                                              'Pay Term:',
                                               style: TextStyle(
                                                 color: Colors.grey,
                                               ),
@@ -497,231 +496,6 @@ class _FilesPageState extends State<FilesPage> {
             239,
             245,
           ),
-        ),
-      );
-
-  /* Widget _buildPopupDialog(BuildContext context) {
-    var vesselDetails;
-    vesselDetails = fetchVesselDetails(url_getVesselDetail,token);
-
-    return AlertDialog(
-      insetPadding: EdgeInsets.symmetric(vertical: 250),
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(30),)
-      ),
-      content:Center(
-        child: FutureBuilder<vesselDetailModel>(
-          future: vesselDetails,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return makePopupContainer(snapshot.data!.name, snapshot.data!.imo, snapshot.data!.flag, snapshot.data!.company);
-            } else if (snapshot.hasError) {
-              return Text('${snapshot.error}');
-            }
-            // By default, show a loading spinner.
-            return const CircularProgressIndicator();
-          },
-        ),
-      ),
-
-    );
-  }*/
-
-  Container makePopupContainer(
-    String name,
-    String imo,
-    String flag,
-    String company,
-  ) =>
-      Container(
-        height: 250,
-        child: Column(
-          children: [
-            Flexible(
-              flex: 2,
-              child: Container(
-                child: Row(
-                  children: [
-                    Text(
-                      name,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.blue,
-                      ),
-                    ),
-                  ],
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                ),
-                height: 20,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            Flexible(
-              flex: 8,
-              child: Container(
-                child: Row(
-                  children: [
-                    Column(
-                      children: [
-                        Container(
-                          child: Text(
-                            'Name',
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                          ),
-                        ),
-                        Container(
-                          child: Text(
-                            'Imo',
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          child: Text(
-                            'Flag',
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          child: Text(
-                            'Company',
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
-                      ],
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    ),
-                    Column(
-                      children: [
-                        Container(
-                          child: Text(
-                            name,
-                            style: TextStyle(
-                              color: Colors.blue,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          child: Text(
-                            imo,
-                            style: TextStyle(
-                              color: Colors.blue,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          child: Text(
-                            flag,
-                            style: TextStyle(
-                              color: Colors.blue,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          child: Text(
-                            company,
-                            style: TextStyle(
-                              color: Colors.blue,
-                            ),
-                          ),
-                        ),
-                      ],
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    ),
-                  ],
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                ),
-                margin: EdgeInsets.all(
-                  10,
-                ),
-                padding: EdgeInsets.all(
-                  2,
-                ),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            Flexible(
-              flex: 3,
-              child: Container(
-                child: Row(
-                  children: [
-                    Container(
-                      child: OutlinedButton(
-                        child: Text(
-                          'SHOW ORDERS',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                        style: OutlinedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(
-                                20,
-                              ),
-                            ),
-                            side: BorderSide.none,
-                          ),
-                          backgroundColor: Colors.blue,
-                          shadowColor: Colors.black,
-                          elevation: 5,
-                        ),
-                        onPressed: () {},
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                      ),
-                    ),
-                    Container(
-                      child: OutlinedButton(
-                        child: Text(
-                          'SHOW ITEMS',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                        style: OutlinedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(
-                                20,
-                              ),
-                            ),
-                            side: BorderSide.none,
-                          ),
-                          backgroundColor: Colors.blue,
-                          shadowColor: Colors.black,
-                          elevation: 5,
-                        ),
-                        onPressed: () {},
-                      ),
-                    ),
-                  ],
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                ),
-              ),
-            )
-          ],
         ),
       );
 }

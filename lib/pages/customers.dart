@@ -39,6 +39,7 @@ class customerDetailModel {
   final int paymentType;
   final String paymentTerm;
   final String note;
+  final Currency currency;
   final int rate;
   final double discount;
 
@@ -52,6 +53,7 @@ class customerDetailModel {
     required this.paymentType,
     required this.paymentTerm,
     required this.note,
+    required this.currency,
     required this.rate,
     required this.discount,
   });
@@ -67,8 +69,25 @@ class customerDetailModel {
       paymentType: json['paymentType'] ?? 0,
       paymentTerm: json['paymentTerm'] ?? '',
       note: json['note'] ?? '',
+      currency: Currency.fromJson(json["currency"]),
       rate: json['rate'] ?? 0,
       discount: json['discount'] ?? 0.0,
+    );
+  }
+}
+
+class Currency {
+  String? id;
+  String? name;
+  bool? isDefault;
+
+  Currency({this.id, this.name, this.isDefault});
+
+  factory Currency.fromJson(Map<String, dynamic> parsedJson) {
+    return Currency(
+      id: parsedJson['id'],
+      name: parsedJson['name'],
+      isDefault: parsedJson['isDefault'],
     );
   }
 }
@@ -86,7 +105,7 @@ Future<List<allCustomersModel>> fetchAllCustomers(
         .map((data) => new allCustomersModel.fromJson(data))
         .toList();
   } else {
-    throw Exception('Unexpected error occuredhhhyyy!');
+    throw Exception('Unexpected error occuredhy!');
   }
 }
 
@@ -103,7 +122,7 @@ Future<customerDetailModel> fetchCustomerDetails(
     // then parse the JSON.
     return customerDetailModel.fromJson(jsonDecode(response.body));
   } else {
-    throw Exception('Failed to load album');
+    throw Exception('Unexpected error occuredhy');
   }
 }
 
@@ -321,6 +340,7 @@ class _CustomersPageState extends State<CustomersPage> {
                 snapshot.data!.paymentTerm,
                 snapshot.data!.discount.toInt(),
                 snapshot.data!.note,
+                snapshot.data!.currency,
                 snapshot.data!.rate,
               );
             } else if (snapshot.hasError) {
@@ -346,6 +366,7 @@ class _CustomersPageState extends State<CustomersPage> {
     String paymentTerm,
     int discount,
     String note,
+    Currency currency,
     int rate,
   ) =>
       Container(
@@ -455,6 +476,15 @@ class _CustomersPageState extends State<CustomersPage> {
                         ),
                         Container(
                           child: Text(
+                            'Currency:',
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 8,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          child: Text(
                             'Rate:',
                             style: TextStyle(
                               color: Colors.grey,
@@ -540,6 +570,15 @@ class _CustomersPageState extends State<CustomersPage> {
                           ),
                         ),
                         Container(
+                          child: Text(
+                            currency.name.toString(),
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontSize: 6,
+                            ),
+                          ),
+                        ),
+                        Container(
                           /*child: Text(
                             rate.toString(),
                             style: TextStyle(
@@ -550,8 +589,8 @@ class _CustomersPageState extends State<CustomersPage> {
                           child: Icon(
                             Icons.star_border,
                             color: Colors.blue,
-                            size: 30.0,
-                          ),
+                            size: 20.0,
+                          ), //
                         ),
                       ],
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,

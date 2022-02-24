@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_app_sas/pages/requisitionnotes.dart';
 import 'package:flutter_app_sas/pages/requisitions.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -14,17 +14,25 @@ String url_getFileDetail = globals.baseUrl + 'File?fileId=';
 class fileDetailModel {
   final String id;
   final String name;
+  final String vesselId;
   final String vessel;
+  final String customerId;
   final String customer;
   final int customerRate;
+  final String departmentId;
   final String department;
+  final String portId;
   final String port;
   final String eta;
   final int paymentType;
   final bool isHighQuality;
   final double discount;
   final String currency;
+  final String currencyId;
   final String city;
+  final String cityId;
+  final String createdBy;
+  final String createdDate;
   final double deliveryCost;
   final double rebate;
   final bool isCalled;
@@ -35,47 +43,72 @@ class fileDetailModel {
   final double boatServiceFee;
   final double exworkTransportationCost;
   final String paymentTerm;
+  final bool isClosed;
+  final String closedBy;
+  final String masterDepId;
+  final String masterDepName;
 
-  fileDetailModel(
-      {required this.id,
-      required this.name,
-      required this.vessel,
-      required this.customer,
-      required this.customerRate,
-      required this.department,
-      required this.port,
-      required this.eta,
-      required this.paymentType,
-      required this.isHighQuality,
-      required this.discount,
-      required this.currency,
-      required this.city,
-      required this.deliveryCost,
-      required this.rebate,
-      required this.isCalled,
-      required this.isMailled,
-      required this.customsCost,
-      required this.exworkNote,
-      required this.note,
-      required this.boatServiceFee,
-      required this.exworkTransportationCost,
-      required this.paymentTerm});
+  fileDetailModel({
+    required this.id,
+    required this.name,
+    required this.vesselId,
+    required this.vessel,
+    required this.customerId,
+    required this.customer,
+    required this.customerRate,
+    required this.departmentId,
+    required this.department,
+    required this.portId,
+    required this.port,
+    required this.eta,
+    required this.paymentType,
+    required this.isHighQuality,
+    required this.discount,
+    required this.currency,
+    required this.currencyId,
+    required this.city,
+    required this.cityId,
+    required this.createdBy,
+    required this.createdDate,
+    required this.deliveryCost,
+    required this.rebate,
+    required this.isCalled,
+    required this.isMailled,
+    required this.customsCost,
+    required this.exworkNote,
+    required this.note,
+    required this.boatServiceFee,
+    required this.exworkTransportationCost,
+    required this.paymentTerm,
+    required this.isClosed,
+    required this.closedBy,
+    required this.masterDepId,
+    required this.masterDepName,
+  });
 
   factory fileDetailModel.fromJson(Map<String, dynamic> json) {
     return fileDetailModel(
       id: json['id'] ?? '',
       name: json['name'] ?? '',
+      vesselId: json['vesselId'] ?? '',
       vessel: json['vessel'] ?? '',
+      customerId: json['customerId'] ?? '',
       customer: json['customer'] ?? '',
       customerRate: json['customerRate'] ?? 0,
+      departmentId: json['departmentId'] ?? '',
       department: json['department'] ?? '',
+      portId: json['portId'] ?? '',
       port: json['port'] ?? '',
       eta: json['eta'] ?? '',
       paymentType: json['paymentType'] ?? 0,
       isHighQuality: json['isHighQuality'] ?? false,
       discount: json['discount'] ?? 0,
       currency: json['currency'] ?? '',
+      currencyId: json['currencyId'] ?? '',
       city: json['city'] ?? '',
+      cityId: json['cityId'] ?? '',
+      createdBy: json['createdBy'] ?? '',
+      createdDate: json['createdDate'] ?? '',
       deliveryCost: json['deliveryCost'] ?? 0,
       rebate: json['rebate'] ?? 0,
       isCalled: json['isCalled'] ?? false,
@@ -86,6 +119,10 @@ class fileDetailModel {
       boatServiceFee: json['boatServiceFee'] ?? 0,
       exworkTransportationCost: json['exworkTransportationCost'] ?? 0,
       paymentTerm: json['paymentTerm'] ?? '',
+      isClosed: json['isClosed'] ?? false,
+      closedBy: json['closedBy'] ?? '',
+      masterDepId: json['masterDepId'] ?? '',
+      masterDepName: json['masterDepName'] ?? '',
     );
   }
 }
@@ -104,7 +141,7 @@ Future<fileDetailModel> fetchFileDetails(String url, String token) async {
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
-    throw Exception('Failed to load album');
+    throw Exception('Unexpected error occuredhy');
   }
 }
 
@@ -175,7 +212,7 @@ class _FileDetailsPage extends State<FileDetailsPage> {
         child: Column(
           children: [
             Flexible(
-              flex: 2,
+              flex: 3,
               fit: FlexFit.tight,
               child: Container(
                 alignment: Alignment.center,
@@ -702,14 +739,9 @@ class _FileDetailsPage extends State<FileDetailsPage> {
           exworkTransportationCost,
           paymentTerm),
       RequisitionsPage(),
-      Center(
-        child: Text(
-          "Notes Page",
-          style: TextStyle(
-              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
-        ),
-      ),
+      RequisitionNotesPage(),
     ];
+
     return IndexedStack(
       index: _selectedIndex,
       children: pages,

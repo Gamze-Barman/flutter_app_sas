@@ -6,6 +6,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'filedetails.dart';
 import 'globals.dart' as globals;
+import 'package:flutter/services.dart';
 
 String token = globals.token;
 
@@ -52,7 +53,7 @@ Future<List<allOrdersModel>> fetchAllOrders(String url, String token) async {
         .map((data) => new allOrdersModel.fromJson(data))
         .toList();
   } else {
-    throw Exception('Unexpected error occuredhhhyyy!');
+    throw Exception('Unexpected error occuredhy!');
   }
 }
 
@@ -67,6 +68,10 @@ class _OrdersPageState extends State<OrdersPage> {
   @override
   void initState() {
     super.initState();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+    ]);
     allOrdersData =
         fetchAllOrders(url_getOrders + globals.selectedWarehouseId, token);
   }

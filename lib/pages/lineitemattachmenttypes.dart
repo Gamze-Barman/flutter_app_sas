@@ -39,7 +39,7 @@ Future<List<allAttachmentTypesModel>> fetchAllAttachmentTypes(
         .map((data) => new allAttachmentTypesModel.fromJson(data))
         .toList();
   } else {
-    throw Exception('Unexpected error occuredhhhyyy!');
+    throw Exception('Unexpected error occuredhy!');
   }
 }
 

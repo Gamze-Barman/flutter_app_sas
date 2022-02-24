@@ -98,7 +98,7 @@ Future<List<allPortsModel>> fetchAllPorts(String url, String token) async {
         .map((data) => new allPortsModel.fromJson(data))
         .toList();
   } else {
-    throw Exception('Unexpected error occuredhhhyyy!');
+    throw Exception('Unexpected error occuredhy!');
   }
 }
 
@@ -117,7 +117,7 @@ Future<allPortsDetailModel> fetchAllPortDetails(
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
-    throw Exception('Failed to load album');
+    throw Exception('Unexpected error occuredhy');
   }
 }
 

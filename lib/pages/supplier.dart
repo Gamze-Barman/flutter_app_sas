@@ -95,7 +95,7 @@ Future<List<allSupplierModel>> fetchAllSuppliers(
         .map((data) => new allSupplierModel.fromJson(data))
         .toList();
   } else {
-    throw Exception('Unexpected error occuredhhhyyy!');
+    throw Exception('Unexpected error occuredhy!');
   }
 }
 
@@ -114,7 +114,7 @@ Future<allSupplierDetailModel> fetchAllSupplierDetails(
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
-    throw Exception('Failed to load album');
+    throw Exception('Unexpected error occuredhy');
   }
 }
 
