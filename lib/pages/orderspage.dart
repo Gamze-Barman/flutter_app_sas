@@ -68,10 +68,7 @@ class _OrdersPageState extends State<OrdersPage> {
   @override
   void initState() {
     super.initState();
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
-      DeviceOrientation.landscapeLeft,
-    ]);
+
     allOrdersData =
         fetchAllOrders(url_getOrders + globals.selectedWarehouseId, token);
   }

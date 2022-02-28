@@ -11,6 +11,7 @@ import 'dart:convert';
 import 'globals.dart' as globals;
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'homepage.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 
 class loginModel {
   final String token;
@@ -68,6 +69,10 @@ dynamic _returnResponse(
           loginModel.fromJson(jsonDecode(response.body)).success.toString());
       print("errors" + loginModel.fromJson(jsonDecode(response.body)).errors);
 
+      Map<String, dynamic> payload = Jwt.parseJwt(token);
+      print('CompanyId');
+      print(payload['CompanyId']);
+      globals.userCompanyId = payload['CompanyId'];
       controller.success();
       return loginModel.fromJson(jsonDecode(response.body));
     case 400:

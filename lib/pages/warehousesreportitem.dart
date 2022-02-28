@@ -3,6 +3,8 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'globals.dart' as globals;
+import 'package:intl/intl.dart';
+import 'package:flutter/services.dart';
 
 String token = globals.token;
 
@@ -15,7 +17,7 @@ class warehouseDetailModel {
   final String description;
   final String unit;
   final double cost;
-  final String currencyId;
+  final Currency currency;
   final double vat;
   final String remark;
   final double availableQtty;
@@ -27,7 +29,7 @@ class warehouseDetailModel {
     required this.description,
     required this.unit,
     required this.cost,
-    required this.currencyId,
+    required this.currency,
     required this.vat,
     required this.remark,
     required this.availableQtty,
@@ -41,10 +43,26 @@ class warehouseDetailModel {
       description: json['description'] ?? '',
       unit: json['unit'] ?? '',
       cost: json['cost'] ?? 0.0,
-      currencyId: json['currencyId'] ?? '',
+      currency: Currency.fromJson(json["currency"]),
       vat: json['vat'] ?? 0.0,
       remark: json['remark'] ?? '',
       availableQtty: json['availableQtty'] ?? 0.0,
+    );
+  }
+}
+
+class Currency {
+  String? id;
+  String? name;
+  bool? isDefault;
+
+  Currency({this.id, this.name, this.isDefault});
+
+  factory Currency.fromJson(Map<String, dynamic> parsedJson) {
+    return Currency(
+      id: parsedJson['id'],
+      name: parsedJson['name'],
+      isDefault: parsedJson['isDefault'],
     );
   }
 }
@@ -80,6 +98,21 @@ class _WarehousesReportItemPageState extends State<WarehousesReportItemPage> {
     super.initState();
     allWarehouseItemsData = fetchAllWarehousesDetails(
         url_getReportItems + globals.selectedWarehouseId, token);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+    ]);
+  }
+
+  @override
+  dispose() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    super.dispose();
   }
 
   @override
@@ -124,19 +157,19 @@ class _WarehousesReportItemPageState extends State<WarehousesReportItemPage> {
   }
 
   Container makeContainer(warehouseDetailModel data) => Container(
-        height: 150,
+        height: 10,
         child: Column(
           children: [
             Flexible(
               child: Container(
                 child: Row(
                   children: [
-                    Flexible(
+                    /*Flexible(
                       child: SizedBox.shrink(),
                       flex: 10,
                       fit: FlexFit.tight,
                     ),
-                    Flexible(
+                      Flexible(
                       child: Container(
                         child: Column(
                           children: [
@@ -192,40 +225,24 @@ class _WarehousesReportItemPageState extends State<WarehousesReportItemPage> {
                       ),
                       flex: 1,
                       fit: FlexFit.tight,
-                    ),
+                    ),*/
                     Flexible(
                       child: Container(
                         child: Row(
                           children: [
                             Flexible(
-                              child: SizedBox.shrink(),
-                              flex: 1,
-                              fit: FlexFit.tight,
-                            ),
-                            Flexible(
                               child: Container(
-                                child: Column(
+                                child: Row(
                                   children: [
                                     Flexible(
-                                      child: SizedBox.shrink(),
-                                      flex: 10,
-                                      fit: FlexFit.tight,
-                                    ),
-                                    Flexible(
                                       child: Container(
-                                        child: Row(
+                                        child: Column(
                                           children: [
                                             Text(
                                               'Item Code',
                                               style: TextStyle(
                                                 color: Colors.grey,
-                                              ),
-                                            ),
-                                            Text(
-                                              data.itemCode,
-                                              style: TextStyle(
-                                                color: Colors.blue,
-                                                fontWeight: FontWeight.bold,
+                                                fontSize: 8,
                                               ),
                                             ),
                                           ],
@@ -233,7 +250,7 @@ class _WarehousesReportItemPageState extends State<WarehousesReportItemPage> {
                                               MainAxisAlignment.spaceBetween,
                                         ),
                                       ),
-                                      flex: 20,
+                                      flex: 3,
                                       fit: FlexFit.tight,
                                     ),
                                     Flexible(
@@ -244,17 +261,12 @@ class _WarehousesReportItemPageState extends State<WarehousesReportItemPage> {
                                               'Description:',
                                               style: TextStyle(
                                                 color: Colors.grey,
-                                              ),
-                                            ),
-                                            Text(
-                                              data.description,
-                                              style: TextStyle(
-                                                color: Colors.blue,
-                                                fontWeight: FontWeight.bold,
                                                 fontSize: 8,
                                               ),
                                             ),
                                           ],
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                         ),
                                       ),
                                       flex: 3,
@@ -262,28 +274,13 @@ class _WarehousesReportItemPageState extends State<WarehousesReportItemPage> {
                                     ),
                                     Flexible(
                                       child: Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                      flex: 1,
-                                      fit: FlexFit.tight,
-                                    ),
-                                    Flexible(
-                                      child: Container(
-                                        child: Row(
+                                        child: Column(
                                           children: [
                                             Text(
                                               'Unit',
                                               style: TextStyle(
                                                 color: Colors.grey,
-                                              ),
-                                            ),
-                                            Text(
-                                              data.unit,
-                                              style: TextStyle(
-                                                color: Colors.blue,
-                                                fontWeight: FontWeight.bold,
+                                                fontSize: 8,
                                               ),
                                             ),
                                           ],
@@ -291,33 +288,18 @@ class _WarehousesReportItemPageState extends State<WarehousesReportItemPage> {
                                               MainAxisAlignment.spaceBetween,
                                         ),
                                       ),
-                                      flex: 20,
+                                      flex: 3,
                                       fit: FlexFit.tight,
                                     ),
                                     Flexible(
                                       child: Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                      flex: 1,
-                                      fit: FlexFit.tight,
-                                    ),
-                                    Flexible(
-                                      child: Container(
-                                        child: Row(
+                                        child: Column(
                                           children: [
                                             Text(
                                               'Available Qtty',
                                               style: TextStyle(
                                                 color: Colors.grey,
-                                              ),
-                                            ),
-                                            Text(
-                                              data.availableQtty.toString(),
-                                              style: TextStyle(
-                                                color: Colors.blue,
-                                                fontWeight: FontWeight.bold,
+                                                fontSize: 8,
                                               ),
                                             ),
                                           ],
@@ -325,33 +307,18 @@ class _WarehousesReportItemPageState extends State<WarehousesReportItemPage> {
                                               MainAxisAlignment.spaceBetween,
                                         ),
                                       ),
-                                      flex: 20,
+                                      flex: 3,
                                       fit: FlexFit.tight,
                                     ),
                                     Flexible(
                                       child: Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                      flex: 1,
-                                      fit: FlexFit.tight,
-                                    ),
-                                    Flexible(
-                                      child: Container(
-                                        child: Row(
+                                        child: Column(
                                           children: [
                                             Text(
                                               'Cost',
                                               style: TextStyle(
                                                 color: Colors.grey,
-                                              ),
-                                            ),
-                                            Text(
-                                              data.cost.toString(),
-                                              style: TextStyle(
-                                                color: Colors.blue,
-                                                fontWeight: FontWeight.bold,
+                                                fontSize: 8,
                                               ),
                                             ),
                                           ],
@@ -359,33 +326,18 @@ class _WarehousesReportItemPageState extends State<WarehousesReportItemPage> {
                                               MainAxisAlignment.spaceBetween,
                                         ),
                                       ),
-                                      flex: 20,
+                                      flex: 3,
                                       fit: FlexFit.tight,
                                     ),
                                     Flexible(
                                       child: Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                      flex: 1,
-                                      fit: FlexFit.tight,
-                                    ),
-                                    Flexible(
-                                      child: Container(
-                                        child: Row(
+                                        child: Column(
                                           children: [
                                             Text(
                                               'Currency',
                                               style: TextStyle(
                                                 color: Colors.grey,
-                                              ),
-                                            ),
-                                            Text(
-                                              data.currencyId.toString(),
-                                              style: TextStyle(
-                                                color: Colors.blue,
-                                                fontWeight: FontWeight.bold,
+                                                fontSize: 8,
                                               ),
                                             ),
                                           ],
@@ -393,41 +345,7 @@ class _WarehousesReportItemPageState extends State<WarehousesReportItemPage> {
                                               MainAxisAlignment.spaceBetween,
                                         ),
                                       ),
-                                      flex: 20,
-                                      fit: FlexFit.tight,
-                                    ),
-                                    Flexible(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                      flex: 1,
-                                      fit: FlexFit.tight,
-                                    ),
-                                    Flexible(
-                                      child: Container(
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              'Vat',
-                                              style: TextStyle(
-                                                color: Colors.grey,
-                                              ),
-                                            ),
-                                            Text(
-                                              data.vat.toString(),
-                                              style: TextStyle(
-                                                color: Colors.blue,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ],
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                        ),
-                                      ),
-                                      flex: 20,
+                                      flex: 3,
                                       fit: FlexFit.tight,
                                     ),
                                   ],
@@ -437,9 +355,68 @@ class _WarehousesReportItemPageState extends State<WarehousesReportItemPage> {
                               fit: FlexFit.tight,
                             ),
                             Flexible(
-                              child: SizedBox.shrink(),
-                              flex: 1,
-                              fit: FlexFit.tight,
+                              child: Container(
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      data.itemCode,
+                                      style: TextStyle(
+                                        color: Colors.blue,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 8,
+                                      ),
+                                    ),
+                                    Text(
+                                      data.description,
+                                      style: TextStyle(
+                                        color: Colors.blue,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 8,
+                                      ),
+                                    ),
+                                    Text(
+                                      data.unit,
+                                      style: TextStyle(
+                                        color: Colors.blue,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 8,
+                                      ),
+                                    ),
+                                    Text(
+                                      data.availableQtty.toString(),
+                                      style: TextStyle(
+                                        color: Colors.blue,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 8,
+                                      ),
+                                    ),
+                                    Text(
+                                      data.cost.toString(),
+                                      style: TextStyle(
+                                        color: Colors.blue,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 8,
+                                      ),
+                                    ),
+                                    Text(
+                                      data.currency.name.toString(),
+                                      style: TextStyle(
+                                        color: Colors.blue,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 8,
+                                      ),
+                                    ),
+                                    Text(
+                                      data.vat.toString(),
+                                      style: TextStyle(
+                                        color: Colors.blue,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 8,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -447,11 +424,11 @@ class _WarehousesReportItemPageState extends State<WarehousesReportItemPage> {
                       flex: 150,
                       fit: FlexFit.tight,
                     ),
-                    Flexible(
+                    /* Flexible(
                       child: SizedBox.shrink(),
                       flex: 1,
                       fit: FlexFit.tight,
-                    ),
+                    ),*/
                   ],
                 ),
               ),

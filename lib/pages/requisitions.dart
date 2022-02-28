@@ -35,15 +35,15 @@ class allRequisitionsModel {
 
   factory allRequisitionsModel.fromJson(Map<String, dynamic> json) {
     return allRequisitionsModel(
-      id: json['id'] ?? 'a',
-      fileId: json['fileId'] ?? 'a',
-      name: json['name'] ?? 'a',
+      id: json['id'] ?? '',
+      fileId: json['fileId'] ?? '',
+      name: json['name'] ?? '',
       discount: json['discount'] ?? 0,
-      remark: json['remark'] ?? 'a',
+      remark: json['remark'] ?? '',
       stage: json['stage'] ?? 0,
       isOrdered: json['isOrdered'] ?? false,
-      poNumber: json['poNumber'] ?? 'a',
-      pricingDate: json['pricingDate'] ?? 'a',
+      poNumber: json['poNumber'] ?? '',
+      pricingDate: json['pricingDate'] ?? '',
     );
   }
 }
@@ -106,7 +106,7 @@ class _RequisitionsPageState extends State<RequisitionsPage> {
     );
   }
 
-  Container makeContainer(allRequisitionsModel data) => Container(
+  Widget makeContainer(allRequisitionsModel data) => Container(
         height: 120,
         child: Column(
           children: [

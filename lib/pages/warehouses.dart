@@ -7,13 +7,14 @@ import 'globals.dart' as globals;
 import 'orderspage.dart';
 
 String token = globals.token;
-
+var list;
 String url_getAllWarehouses = globals.baseUrl + 'Warehouse/GetWarehouses';
+String url_getDepartments = globals.baseUrl + 'Department/GetAllDepartments';
 
 class allWarehousesModel {
   final String id;
   final String name;
-  final String currencyId;
+  final Currency currency;
   final String managerEmail;
   final bool isFreeZone;
   final String departmentId;
@@ -21,7 +22,7 @@ class allWarehousesModel {
   allWarehousesModel({
     required this.id,
     required this.name,
-    required this.currencyId,
+    required this.currency,
     required this.managerEmail,
     required this.isFreeZone,
     required this.departmentId,
@@ -31,10 +32,52 @@ class allWarehousesModel {
     return allWarehousesModel(
       id: json['id'] ?? '',
       name: json['name'] ?? '',
-      currencyId: json['currencyId'] ?? '',
+      currency: Currency.fromJson(json["currency"]),
       managerEmail: json['managerEmail'] ?? '',
       isFreeZone: json['isFreeZone'] ?? false,
       departmentId: json['departmentId'] ?? '',
+    );
+  }
+}
+
+class Department {
+  final String id;
+  final String name;
+  final String suffix;
+  final String masterDepartmentId;
+  final bool isSubDepartment;
+
+  Department({
+    required this.id,
+    required this.name,
+    required this.suffix,
+    required this.masterDepartmentId,
+    required this.isSubDepartment,
+  });
+
+  factory Department.fromJson(Map<String, dynamic> json) {
+    return Department(
+      id: json['id'] ?? '',
+      name: json['name'] ?? '',
+      suffix: json['suffix'] ?? '',
+      masterDepartmentId: json['masterDepartmentId'] ?? '',
+      isSubDepartment: json['isSubDepartment'] ?? false,
+    );
+  }
+}
+
+class Currency {
+  String? id;
+  String? name;
+  bool? isDefault;
+
+  Currency({this.id, this.name, this.isDefault});
+
+  factory Currency.fromJson(Map<String, dynamic> parsedJson) {
+    return Currency(
+      id: parsedJson['id'],
+      name: parsedJson['name'],
+      isDefault: parsedJson['isDefault'],
     );
   }
 }
@@ -56,6 +99,20 @@ Future<List<allWarehousesModel>> fetchAllWarehouses(
   }
 }
 
+Future<List<Department>> fetchAllDepartments(String url, String token) async {
+  final response = await http.get(url, headers: {
+    "Accept": "application/json",
+    "Content-Type": "application/x-www-form-urlencoded",
+    "Authorization": "bearer " + token,
+  });
+  if (response.statusCode == 200) {
+    List jsonResponse = json.decode(response.body);
+    return jsonResponse.map((data) => new Department.fromJson(data)).toList();
+  } else {
+    throw Exception('Unexpected error occuredhy!');
+  }
+}
+
 class WarehousesPage extends StatefulWidget {
   @override
   _WarehousesPageState createState() => _WarehousesPageState();
@@ -63,11 +120,18 @@ class WarehousesPage extends StatefulWidget {
 
 class _WarehousesPageState extends State<WarehousesPage> {
   late Future<List<allWarehousesModel>> allWarehousesData;
+  late Future<List<Department>> allDepartmentsData;
 
   @override
   void initState() {
     super.initState();
     allWarehousesData = fetchAllWarehouses(url_getAllWarehouses, token);
+    allDepartmentsData = fetchAllDepartments(url_getDepartments, token);
+    convertFuturetoList();
+  }
+
+  void convertFuturetoList() async {
+    list = await allDepartmentsData;
   }
 
   @override
@@ -119,8 +183,7 @@ class _WarehousesPageState extends State<WarehousesPage> {
 
   Widget makeContainer(allWarehousesModel data) {
     globals.selectedVesselId = data.id;
-    String currency = "";
-    String department = "";
+    // String currency = "";
 
     /* if (data.currencyId == "dbdbe32d-eecb-4ce9-83f9-22da6d1e9ac1") {
       currency = "USD";
@@ -137,7 +200,6 @@ class _WarehousesPageState extends State<WarehousesPage> {
     } else {
       currency = "-";
     }*/
-
     /*if (data.departmentId == "9b8954ab-1569-491f-96cb-192742cef5dd") {
       department = "Accounting";
     } else if (data.departmentId == "f332f079-a5c6-4ae4-8e1e-92fe56c37803") {
@@ -155,6 +217,19 @@ class _WarehousesPageState extends State<WarehousesPage> {
     return Container(
       child: GestureDetector(
         onTap: () {
+          String department = "";
+          final allIdList = list.map((e) => e.id);
+          print(allIdList);
+          print(data.id);
+          if (allIdList.any((element) => data.departmentId == element)) {
+            final index =
+                list.indexWhere((element) => element.id == data.departmentId);
+
+            department = list[index].name;
+          } else {
+            department = "-";
+          }
+
           showDialog(
             context: context,
             builder: (BuildContext context) => _buildPopupDialog(
@@ -162,7 +237,7 @@ class _WarehousesPageState extends State<WarehousesPage> {
                 data.name,
                 department,
                 data.managerEmail,
-                currency,
+                data.currency,
                 data.isFreeZone.toString()),
           );
           globals.selectedWarehouseId = data.id;
@@ -246,9 +321,9 @@ class _WarehousesPageState extends State<WarehousesPage> {
   Widget _buildPopupDialog(
     BuildContext context,
     String name,
-    String departmentId,
+    String departmentName,
     String managerEmail,
-    String currencyId,
+    Currency currency,
     String isFreeZone,
   ) {
     return AlertDialog(
@@ -258,14 +333,14 @@ class _WarehousesPageState extends State<WarehousesPage> {
           Radius.circular(20),
         )),
         content: makePopupContainer(
-            name, departmentId, managerEmail, currencyId, isFreeZone));
+            name, departmentName, managerEmail, currency, isFreeZone));
   }
 
   Container makePopupContainer(
     String name,
-    String departmentId,
+    String departmentName,
     String managerEmail,
-    String currencyId,
+    Currency currency,
     String isFreeZone,
   ) =>
       Container(
@@ -301,17 +376,6 @@ class _WarehousesPageState extends State<WarehousesPage> {
                   children: [
                     Column(
                       children: [
-                        Container(
-                          child: Text(
-                            'Name',
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                          ),
-                        ),
                         Container(
                           child: Text(
                             'Department:',
@@ -351,15 +415,7 @@ class _WarehousesPageState extends State<WarehousesPage> {
                       children: [
                         Container(
                           child: Text(
-                            name,
-                            style: TextStyle(
-                              color: Colors.blue,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          child: Text(
-                            departmentId,
+                            departmentName,
                             style: TextStyle(
                               color: Colors.blue,
                             ),
@@ -375,19 +431,33 @@ class _WarehousesPageState extends State<WarehousesPage> {
                         ),
                         Container(
                           child: Text(
-                            currencyId,
+                            currency.name.toString(),
                             style: TextStyle(
                               color: Colors.blue,
                             ),
                           ),
                         ),
                         Container(
-                          child: Text(
+                          /*child: Text(
                             isFreeZone.toString(),
                             style: TextStyle(
                               color: Colors.blue,
                             ),
-                          ),
+                          ),*/
+
+                          child: isFreeZone == false
+                              ? Image(
+                                  image: AssetImage('assets/images/tickk.png'),
+                                  height: 20,
+                                  width: 20,
+                                  alignment: Alignment.center,
+                                )
+                              : Image(
+                                  image: AssetImage('assets/images/cross.png'),
+                                  height: 20,
+                                  width: 20,
+                                  alignment: Alignment.center,
+                                ),
                         ),
                       ],
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,

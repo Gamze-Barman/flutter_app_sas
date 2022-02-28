@@ -196,6 +196,7 @@ class _FilesPageState extends State<FilesPage> {
                                       style: TextStyle(
                                         color: Colors.blue,
                                         fontWeight: FontWeight.bold,
+                                        fontSize: 9,
                                       ),
                                     ),
                                   ],
